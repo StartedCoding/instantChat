@@ -4,7 +4,9 @@ import { io } from "socket.io-client";
 const socket = io("https://instantchat-csl7.onrender.com");
 
 function App() {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(
+    () => localStorage.getItem("username") || ""
+  );
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [chatStarted, setChatStarted] = useState(false);
@@ -45,7 +47,12 @@ function App() {
           />
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full transition"
-            onClick={() => username.trim() && setChatStarted(true)}
+            onClick={() => {
+              if (username.trim()) {
+                localStorage.setItem("username", username);
+                setChatStarted(true);
+              }
+            }}
           >
             🚀 Join Chat
           </button>
